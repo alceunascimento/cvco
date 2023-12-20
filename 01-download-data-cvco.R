@@ -51,3 +51,5 @@ link_element$click()
 
 # Close the browser when done
 remDr$close()
+
+# end
