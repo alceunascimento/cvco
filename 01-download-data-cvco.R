@@ -3,7 +3,14 @@ library(rvest)
 library(xml2)
 
 # Start a RSelenium client
-remDr <- remoteDriver(remoteServerAddr = "localhost", port = 4444, browserName = "firefox")
+# Create a server
+rD <- rsDriver(browser = "firefox",
+               chromever = NULL)
+
+# Create a driver to R
+remDr <- rD$client
+
+#Abre o servidor
 remDr$open()
 
 # Navigate to the website
@@ -13,14 +20,16 @@ remDr$navigate("http://www2.curitiba.pr.gov.br/gtm/pmat_consultardadosalvaracons
 Sys.sleep(5)
 
 # Find and click the radio button for the type of input
-radio_button <- remDr$findElement(using = "css selector", "input[id='rdoTipoPesquisa_3']")
+radio_button <- remDr$findElement(using = "xpath",
+                                  value = "//input[@id='rdoTipoPesquisa_3']/td/tr/tbody/table/td/tr")
+
 radio_button$click()
 
 # Wait briefly to ensure the page reacts to the radio button selection
 Sys.sleep(2)
 
 # Find the first input field by XPath and enter the first numeric value
-first_input_field <- remDr$findElement(using = "xpath", "/html/body/form/table[3]/tbody/tr[3]/td[2]/input")
+first_input_field <- remDr$findElement(using = 'type', value = '3')
 first_input_field$sendKeysToElement(list("32097011"))
 
 # Find the second input field by XPath and enter the second numeric value
